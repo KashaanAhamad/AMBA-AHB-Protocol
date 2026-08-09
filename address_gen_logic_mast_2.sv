@@ -24,7 +24,7 @@ module address_gen_logic_mast_2(
 
    	input hclk_m2,
 	input hreset_m2,
-	input wire [3:0]hburst_m2,
+	input wire [2:0]hburst_m2,
 	input wire [7:0]wrap_byte_variable_m2,
 	input wire [31:0]start_wrap_address_m2,
 	input wire [31:0]end_wrap_address_m2,
@@ -36,7 +36,6 @@ module address_gen_logic_mast_2(
 	input wire [31:0]haddr_m2,
 	
 	output reg [31:0]addr_out_m2
-	
     );
     parameter reg [31:0]start_addrs_m2;
     //Next address generation logic sequential
@@ -51,7 +50,7 @@ module address_gen_logic_mast_2(
     	   	if(remainder_temp_m2 !=0)	//I am already inside wrap region, so now I must check whether to wrap back or just increment
     	   	 addr_out_m2 <=(addr_out_m2 ==end_wrap_address_m2)? start_wrap_address_m2 : ((addr_out_m2 == (start_addrs_m2-4))?addr_out_m2:(addr_out_m2+4));
     	   	else 
-    	   	 addr_out_m2 <= (haddr_m2 ==((start_addrs_m2 + wrap_byte_variable_m2)-1))?addr_out_m2:(addr_out_m2 +4);
+    	   	 addr_out_m2 <= (addr_out_m2 ==((start_addrs_m2 + wrap_byte_variable_m2)-1))?addr_out_m2:(addr_out_m2 +4);
     	   	 //non-wrap burst
     	   end
     	 else

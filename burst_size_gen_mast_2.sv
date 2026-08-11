@@ -23,7 +23,7 @@
 module burst_size_gen_mast_2(
 
    input wire [2:0]hburst_m2,
-    output logic [4:0] burst_size_m2
+    output logic [3:0] burst_size_m2
     );
     //Burst size generation in terms of beats
     

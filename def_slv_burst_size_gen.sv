@@ -23,7 +23,7 @@
 module def_slv_burst_size_gen(
 	input logic [2:0] def_hburst,
     
-    output logic [3:0] def_burst_size
+        output logic [3:0] def_burst_size
     );
 always_comb
 begin

@@ -22,7 +22,7 @@
  //combinational
 module def_burst_size_generation(
     input wire [2:0]def_hburst,
-    output logic [4:0] def_burst_size
+    output logic [3:0] def_burst_size
     );
     //Burst size generation in terms of beats
     

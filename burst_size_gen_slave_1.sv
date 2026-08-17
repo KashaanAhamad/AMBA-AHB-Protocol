@@ -24,7 +24,7 @@ module burst_size_gen_slave_1(
 	input logic [2:0]hburst_s1,
 	
 	//Signal going to FSM
-    output logic [4:0] burst_size_s1
+    output logic [3:0] burst_size_s1
     );
 always_comb
 begin

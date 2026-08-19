@@ -22,7 +22,8 @@
 //combinational
 module burst_size_generation(
     input wire [2:0]hburst_m1,
-    output logic [4:0] burst_size_m1
+    
+    output logic [3:0] burst_size_m1
     );
     //Burst size generation in terms of beats
     

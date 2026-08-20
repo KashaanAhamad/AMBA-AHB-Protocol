@@ -41,13 +41,13 @@ module data_gen_logic_s2(
     parameter logic [31:0] DATA_MEMORY_S2 = 32'h1A5B203B;
 
     logic [31:0] data_mem_s2;
-    logic [7:0]  slave_mem_s2 [0:2047];
+    logic [7:0]  slave_mem_s2 [1024:2047];
 
     always_ff @(posedge hclk_s2) begin
     if (!hreset_s2) begin
         data_mem_s2 = DATA_MEMORY_S2;
            
-        for (int i = 1536; i < 2048; i = i + 4) begin
+        for (int i = 1024; i < 2048; i = i + 4) begin
            slave_mem_s2[i]   <= data_mem_s2[31:24];
            slave_mem_s2[i+1] <= data_mem_s2[23:16];
            slave_mem_s2[i+2] <= data_mem_s2[15:8];

@@ -21,34 +21,15 @@
 
 
 module default_slave_fsm(
-						hclk_def,
-						hreset_def,
-						hsel_def,
-						htrans_def,
-						
-						//unused signals
-						haddr_def,
-						hwrite_def,
-						hsize_def,
-						hburst_def,						
-						hready_def,
-						hwdata_def,		
-						//output
-						hready_out_def,
-						hresp_def
-						//hrdata_def
-    			);
-    			
-    input [31:0]haddr_def,hwdata_def;
-    input hwrite_def,hsel_def,hready_def;
-    input hclk_def,hreset_def;
-    input [2:0]hsize_def,hburst_def;
-    input [1:0]htrans_def;
-    
-    output reg hready_out_def;
-    output reg [1:0]hresp_def;
-    //output reg [31:0]hrdata_def;
-    
+    input logic hclk_def,
+    input logic hreset_def,
+    input logic hsel_def,
+    input logic hready_def,
+    input logic [1:0] htrans_def,
+    output logic hready_out_def,
+    output logic [1:0] hresp_def
+);
+
     reg [1:0] state_def, next_state_def;
     
     parameter 	IDLE_SLAVE_DEF=2'b00, ERROR_SLAVE_DEF=2'b01, 
@@ -56,37 +37,45 @@ module default_slave_fsm(
     
     always_comb
     begin
-    	case(state_def)
-    		IDLE_SLAVE_DEF: begin
-    			if(hsel_def)
-    				next_state_def =((htrans_def ==2'b10) || (htrans_def == 2'b11))? ERROR_SLAVE_DEF: OK_SLAVE_DEF;
-				else
-					next_state_def = IDLE_SLAVE_DEF;
-    		end
-    		
-    		OK_SLAVE_DEF: begin
-    			if(!hsel_def)
-    				next_state_def =IDLE_SLAVE_DEF;
-    			else
-    				next_state_def =((htrans_def ==2'b01) || (htrans_def ==2'b00))?OK_SLAVE_DEF: ERROR_SLAVE_DEF;
-    		end
-    		
-    		ERROR_SLAVE_DEF: begin
-    			if(!hsel_def)
-    				next_state_def = IDLE_SLAVE_DEF;
-    			else
-    				next_state_def = ERROR_CYCLE_SLAVE_DEF;
-    		end
-    		
-    		ERROR_CYCLE_SLAVE_DEF: begin
-    			if(!hsel_def)
-    				next_state_def = IDLE_SLAVE_DEF;
-    			else if((htrans_def ==2'b10) || (htrans_def ==2'b11))
-    				next_state_def = ERROR_CYCLE_SLAVE_DEF;
-    			else
-    				next_state_def = IDLE_SLAVE_DEF;
-    		end
-    	endcase
+        next_state_def = state_def;
+        case(state_def)
+            IDLE_SLAVE_DEF: begin
+                if(hready_def) begin
+                    if(hsel_def)
+                        next_state_def = ((htrans_def == 2'b10) || (htrans_def == 2'b11)) ? ERROR_SLAVE_DEF : OK_SLAVE_DEF;
+                    else
+                        next_state_def = IDLE_SLAVE_DEF;
+                end
+            end
+            
+            OK_SLAVE_DEF: begin
+                if(hready_def) begin
+                    if(!hsel_def)
+                        next_state_def = IDLE_SLAVE_DEF;
+                    else
+                        next_state_def = ((htrans_def == 2'b01) || (htrans_def == 2'b00)) ? OK_SLAVE_DEF : ERROR_SLAVE_DEF;
+                end
+            end
+            
+            ERROR_SLAVE_DEF: begin
+                // Transition unconditionally since HREADYOUT is 0 (making hready_def 0)
+                if(!hsel_def)
+                    next_state_def = IDLE_SLAVE_DEF;
+                else
+                    next_state_def = ERROR_CYCLE_SLAVE_DEF;
+            end
+            
+            ERROR_CYCLE_SLAVE_DEF: begin
+                if(hready_def) begin
+                    if(!hsel_def)
+                        next_state_def = IDLE_SLAVE_DEF;
+                    else if((htrans_def == 2'b10) || (htrans_def == 2'b11))
+                        next_state_def = ERROR_CYCLE_SLAVE_DEF;
+                    else
+                        next_state_def = IDLE_SLAVE_DEF;
+                end
+            end
+        endcase
    end
    
    always_ff @(posedge hclk_def, negedge hreset_def)

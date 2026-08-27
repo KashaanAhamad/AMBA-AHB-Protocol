@@ -72,6 +72,8 @@ module First_slave_fsm(
    // parameter reg [31:0]data_memory_s1 =32'h1A5b203b;
     always_comb
     begin
+    	next_state_s1 = state_s1;
+    	stay_s1 = 0;
     	case(state_s1)
     		IDLE_SLAVE_FIRST:begin
     			if(hready_s1)
@@ -139,7 +141,7 @@ module First_slave_fsm(
    	else
    		state_s1 <= next_state_s1;
    	end
-   	
+   	/*
    always_comb
    begin	
    		case(state_s1)
@@ -195,7 +197,7 @@ module First_slave_fsm(
    	else
    		state_s1 <= next_state_s1;
    	end
-   	
+   	*/
    always_comb
    begin	
    		case(state_s1)

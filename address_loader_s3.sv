@@ -33,7 +33,7 @@ module address_loader_s3(
     begin
     	if(load_addrs_s3)
     	begin
-    		if(haddr_s3 < 512) begin
+    		if(haddr_s3 < 2560) begin
     		if(hwrite_s3)
     			address_in_s3 <= haddr_s3;
     		end

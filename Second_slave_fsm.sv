@@ -79,6 +79,9 @@ module Second_slave_fsm(
 	
 	always_comb
 	begin
+		next_state_s2 = state_s2;
+		stay_s2 = 0;
+		stay_wait_s2 = 0;
 		case(state_s2)
 			IDLE_SLAVE_SECOND: begin
 				if(hready_s2)

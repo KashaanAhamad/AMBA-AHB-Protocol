@@ -37,7 +37,7 @@ module Third_slave_fsm(
 	input logic [1:0]resp_out_s3,
 	
 	//Signal coming from Burst_size_gen
-	input logic burst_size_s3,
+	input logic [3:0]burst_size_s3,
 	
 	//Signal coming from Data_generation_logic
 	input logic [31:0]data_out_s3,
@@ -67,12 +67,15 @@ module Third_slave_fsm(
     				   SEQ_WRITE_SLAVE_THIRD =4'b0010, READ_WAIT_SLAVE_THIRD =4'b0011,
     				   SEQ_READ_SLAVE_THIRD =4'b0100,  WAIT_STATE_SLAVE_THIRD =4'b0101;
     
-    reg [31:0]data_out_s3, address_in_s3, data_mem_s3,indata_s3;
+    //Removed re-declaration of data_out_s3 (already an input port)
+    reg [31:0]address_in_s3, data_mem_s3,indata_s3;
     //reg [1:0]resp_out_s3;
     
     parameter reg [31:0]data_memory_s3 =32'h1A5b203b;
     always_comb
     begin
+    	next_state_s3 = state_s3;
+    	stay_s3 = 0;
     	case(state_s3)
     		IDLE_SLAVE_THIRD:begin
     			if(hready_s3)
@@ -140,7 +143,7 @@ module Third_slave_fsm(
    	else
    		state_s3 <= next_state_s3;
    	end
-   	
+  /* 	
    always_comb
    begin	
    		case(state_s3)
@@ -196,6 +199,7 @@ module Third_slave_fsm(
    	else
    		state_s3 <= next_state_s3;
    	end
+   */
    	
    always_comb
    begin	

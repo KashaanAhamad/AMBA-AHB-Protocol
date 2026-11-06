@@ -50,7 +50,7 @@ module address_generation_logic(
     	   	if(remainder_temp_m1 !=0)	//I am already inside wrap region, so now I must check whether to wrap back or just increment
     	   	 addr_out_m1 <=(addr_out_m1 ==end_wrap_address_m1)? start_wrap_address_m1 : ((addr_out_m1 == (start_addrs_m1-4))?addr_out_m1:(addr_out_m1+4));
     	   	else 
-    	   	 addr_out_m1 <= (haddr_out_m1 ==((start_addrs_m1 + wrap_byte_variable_m1)-1))?addr_out_m1:(addr_out_m1 +4);
+    	   	 addr_out_m1 <= (addr_out_m1 ==((start_addrs_m1 + wrap_byte_variable_m1)-1))?addr_out_m1:(addr_out_m1 +4);
     	   	 //non-wrap burst
     	   end
     	 else

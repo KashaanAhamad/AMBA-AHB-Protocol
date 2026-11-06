@@ -26,11 +26,10 @@ module address_calc_logic(
 	output reg [31:0]wrap_byte_variable_m1,//[7:0]
 	output reg [31:0]start_wrap_address_m1,
 	output reg [31:0]end_wrap_address_m1,
+	output reg [31:0]remainder_temp_m1,
+	output reg [31:0]quotient_temp_m1
    );
    parameter [31:0]start_addrs_m1=32'h0000_0600;
-
-   logic [31:0] remainder_temp_m1;
-   logic [31:0] quotient_temp_m1;
    
  always_comb
     begin

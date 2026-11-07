@@ -82,7 +82,7 @@ module slave_3_top(
 						 .store_data_s3(store_data_s3)
 						);
     
-    burst_size_gen_s3 s3_burst_size( .hburst_s3(hburst_s3),
+    burst_size_generation_s3 s3_burst_size( .hburst_s3(hburst_s3),
     								 .burst_size_s3(burst_size_s3)
     							 );
     							 

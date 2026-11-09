@@ -198,8 +198,9 @@ begin
 		hwrite_m2 = write_m2;
 		hsize_m2 = 3'b010;
 		hburst_m2 = burst_out_m2;
+		hwdata_m2 = 32'b0;
 		hbusreq_m2 = 0;
-		load_data_m2 = 0;//interbnal signals
+		load_data_m2 = 0;//internal signals
 		load_addr_m2 = 0;//internal signals
 end
 	else if(state_m2== BUSREQ_MAST_SECOND)
@@ -209,31 +210,11 @@ end
 		hwrite_m2 = write_m2;
 		hsize_m2 = 3'b010;
 		hburst_m2 = burst_out_m2;
+		hwdata_m2 = 32'b0;
 		hbusreq_m2 = req_m2;
 		load_data_m2 = 0; //internal signal
 		load_addr_m2 = 0; //internal signal
 end
-
-//else if (state_m2== NON_SEQ_WRITE_MAST_SECOND)
-//	begin
-//		haddr_m2 = addr_out_m2;
-//		htrans_m2 = 2'b10;
-//		hwrite_m2 = write_m2;
-//		hsize_m2 = 3'b010;
-//		hburst_m2 = burst_out_m2;
-//		hbusreq_m2 = req_m2;
-//		load_data_m2 = 0;//internal signal
-//		load_addr_m2 = 1;//internal signal 
-//	end
-//else if(state_m2 == WRITE_WAIT_MAST_SECOND)//Missing
-//begin
-//haddr_m2 = addr_out_m2;
-//htrans_m2 = 2'b10;
-//hwrite_m2 = write_m2;
-//hsize_m2 = 3'b010:
-
-//.....
-
 
 else if (state_m2== NON_SEQ_WRITE_MAST_SECOND)
 	begin
@@ -242,6 +223,7 @@ else if (state_m2== NON_SEQ_WRITE_MAST_SECOND)
 		hwrite_m2 = write_m2;
 		hsize_m2 = 3'b010;
 		hburst_m2 = burst_out_m2;
+		hwdata_m2 = data_out_m2;
 		hbusreq_m2 = req_m2;
 		load_data_m2 = 0;//internal signal
 		load_addr_m2 = 1;//internal signal
@@ -250,17 +232,14 @@ else if (state_m2== NON_SEQ_WRITE_MAST_SECOND)
 else if(state_m2 == WRITE_WAIT_MAST_SECOND)
 	begin
 		haddr_m2 = addr_out_m2;
-		htrans_m2 = 2'b10;
+		htrans_m2 = 2'b00;
 		hwrite_m2 = write_m2;
 		hsize_m2 = 3'b010;
 		hburst_m2 = burst_out_m2;
-		// hwdata_m2 = data_out_m2;
-		hwdata_m2 = hwdata_m2;
-		
+		hwdata_m2 = data_out_m2;
 		hbusreq_m2 = req_m2;
 		load_data_m2 = 0;//internal signal
 		load_addr_m2 = 0; //internal signal
-		transfer_start_request_m2 = 0;
 	end
 
 else if(state_m2 == SEQ_WRITE_MAST_SECOND)
@@ -283,7 +262,7 @@ else if(state_m2 == NON_SEQ_READ_MAST_SECOND)
 		hwrite_m2 = write_m2;
 		hsize_m2 = 3'b010;
 		hburst_m2 = burst_out_m2;
-		hwdata_m2 = data_out_m2;
+		hwdata_m2 = 32'b0;
 		hbusreq_m2 = req_m2;
 		load_data_m2 = 0;//internal signal 
 		load_addr_m2 = 1;//internal signal
@@ -292,15 +271,14 @@ else if(state_m2 == NON_SEQ_READ_MAST_SECOND)
 else if(state_m2 == READ_WAIT_MAST_SECOND)
 	begin
 		haddr_m2 = addr_out_m2;
-		htrans_m2 = 2'b10;
+		htrans_m2 = 2'b00;
 		hwrite_m2 = write_m2;
 		hsize_m2 = 3'b010;
 		hburst_m2 = burst_out_m2;
-		hwdata_m2 = data_out_m2;
+		hwdata_m2 = 32'b0;
 		hbusreq_m2 = req_m2;
 		load_data_m2 = 0;//internal signal
 		load_addr_m2 = 0;//internal signal
-		transfer_start_request_m2 = 0;
 	end
 
 else if(state_m2 == SEQ_READ_MAST_SECOND)
@@ -310,11 +288,49 @@ else if(state_m2 == SEQ_READ_MAST_SECOND)
 		hwrite_m2 = write_m2;
 		hsize_m2 = 3'b010;
 		hburst_m2 = burst_out_m2;
-		hwdata_m2 = data_out_m2;
+		hwdata_m2 = 32'b0;
 		hbusreq_m2 = req_m2;
 		load_data_m2 = 0;//internal signal 
 		load_addr_m2 = 1;//internal signal
 	end
+
+else if(state_m2 == LAST_WRITE_MAST_SECOND)
+	begin
+		haddr_m2 = addr_out_m2;
+		htrans_m2 = 2'b00;
+		hwrite_m2 = write_m2;
+		hsize_m2 = 3'b010;
+		hburst_m2 = burst_out_m2;
+		hwdata_m2 = data_out_m2;
+		hbusreq_m2 = req_m2;
+		load_data_m2 = 0;//internal signal
+		load_addr_m2 = 0;//internal signal
+	end
+
+else if(state_m2 == LAST_READ_MAST_SECOND)
+	begin
+		haddr_m2 = addr_out_m2;
+		htrans_m2 = 2'b00;
+		hwrite_m2 = write_m2;
+		hsize_m2 = 3'b010;
+		hburst_m2 = burst_out_m2;
+		hwdata_m2 = 32'b0;
+		hbusreq_m2 = req_m2;
+		load_data_m2 = 0;//internal signal
+		load_addr_m2 = 0;//internal signal
+	end
+
+else // default - prevents latch inference
+	begin
+		haddr_m2 = 32'b0;
+		htrans_m2 = 2'b00;
+		hwrite_m2 = 1'b0;
+		hsize_m2 = 3'b010;
+		hburst_m2 = 3'b000;
+		hwdata_m2 = 32'b0;
+		hbusreq_m2 = 1'b0;
+		load_data_m2 = 0;
+		load_addr_m2 = 0;
+	end
 end
 endmodule
-

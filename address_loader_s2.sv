@@ -29,12 +29,12 @@ module address_loader_s2(
 	
 	output logic [31:0] address_in_s2
     );
-    //always_ff @(posedge hclk_s2)
-    always_comb
+    //Sequential - matches address_loader_slave_1 and address_loader_s3 patterns
+    always_ff @(posedge hclk_s2)
     begin
      if(load_addrs_s2)
      begin
-     	if(haddr_s2 <1536)
+     	if(haddr_s2 < 1536)
      	begin
      		if(hwrite_s2)
      			address_in_s2 <= haddr_s2;
@@ -42,8 +42,8 @@ module address_loader_s2(
      	else
      	begin
      		if(!hwrite_s2)
-     			address_in_s2 <=haddr_s2;
-     		end
+     			address_in_s2 <= haddr_s2;
      	end
      end
+    end
 endmodule

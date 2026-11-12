@@ -35,7 +35,7 @@ module First_slave_fsm(
 	input logic [1:0]resp_out_s1,
 	
 	//Signal comming from Burst_size_gen
-	input logic burst_size_s1, 
+	input logic [3:0]burst_size_s1, 
 	
 	//Signal comming from Data_generation_logic
 	input logic [31:0]data_out_s1,
@@ -66,8 +66,8 @@ module First_slave_fsm(
     SEQ_WRITE_SLAVE_FIRST =4'b0010, READ_WAIT_SLAVE_FIRST =4'b0011,SEQ_READ_SLAVE_FIRST =4'b0100,
     WAIT_STATE_SLAVE_FIRST =4'b0101;
     
-    reg [31:0]data_out_s1, address_in_s1, data_mem_s1;
-    reg [1:0]resp_out_s1;
+    //Removed re-declarations of data_out_s1 and resp_out_s1 (already input ports)
+    reg [31:0]address_in_s1, data_mem_s1;
     
    // parameter reg [31:0]data_memory_s1 =32'h1A5b203b;
     always_comb

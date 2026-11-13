@@ -38,7 +38,7 @@ module Second_slave_fsm(
 	input logic [1:0]resp_out_s2,
 	
 	//Signal coming from Burst_size_gen
-	input logic burst_size_s2,
+	input logic [3:0]burst_size_s2,
 	
 	//Signal coming from Data_generation_logic
 	input logic [31:0]data_out_s2,
@@ -69,7 +69,7 @@ module Second_slave_fsm(
 	parameter reg[3:0] IDLE_SLAVE_SECOND=4'b0000, 	ADDRESS_SLAVE_SECOND=4'b0001,
     				   WRITE_WAIT_SLAVE_SECOND =4'b0010, SEQ_WRITE_SLAVE_SECOND=4'b0011,
     				   READ_WAIT_SLAVE_SECOND=4'b0100,SEQ_READ_SLAVE_SECOND=4'b0101, 
-    				   WAIT_STATE_SLAVE_SECOND =4'b0110, AFTER_WAIT_STATE_SLAVE_SECOND=4'b0101,
+    				   WAIT_STATE_SLAVE_SECOND =4'b0110, AFTER_WAIT_STATE_SLAVE_SECOND=4'b0111,
     				   LAST_WAIT_STATE_SLAVE_SECOND =4'b1000;
 	
 	reg [31:0] address_in_s2,data_mem_s2;

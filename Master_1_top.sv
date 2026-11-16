@@ -47,7 +47,15 @@ module Master_1_top(
     wire [7:0] wrap_byte_variable_m1;
     wire [31:0] start_wrap_address_m1;
     wire [31:0] end_wrap_address_m1;
-    wire [31:0] remainder_temp_m1;    
+    wire [31:0] remainder_temp_m1;  
+
+	//Signal for Address_generation_logic and FSM
+	wire [31:0] addr_out_m1; 
+	logic load_addr_m1;  
+
+	//Signal for Data_generation_logic and FSM
+	wire [31:0] data_out_m1;
+	logic load_data_m1;  
     
     First_master_fsm fsm_mast_1( //Inputs
     							 .hclk_m1(hclk_m1),
@@ -58,9 +66,9 @@ module Master_1_top(
 								 .hgrant_m1(hgrant_m1),
 								 .hrdata_m1(hrdata_m1), 
 								  
-								 .data_out_m1(), 	//Coming from data generation logic(Size=32bit)
+								 .data_out_m1(data_out_m1), 	 //Coming from data generation logic(Size=32bit)
 								 .burst_size_m1(burst_size_m1),  //Coming from Burst size generation logic (int type)
-								 .addr_out_m1(),    //Coming from Address generation logic (Size=32bit)
+								 .addr_out_m1(addr_out_m1),    	 //Coming from Address generation logic (Size=32bit)
 								
 								 //Output
 								 .hwdata_m1(hwdata_m1),				 
@@ -71,8 +79,8 @@ module Master_1_top(
 								 .htrans_m1(htrans_m1),
 								 .hbusreq_m1(hbusreq_m1),
 								 
-								 .load_data_m1(),	//Signal going to data generation logic (size=1bit)
-								 .load_addr_m1()	//Signal going to Address generation logic (Size=1bit)	 
+								 .load_data_m1(load_data_m1),	//Signal going to data generation logic (size=1bit)
+								 .load_addr_m1(load_addr_m1)	//Signal going to Address generation logic (Size=1bit)	 
 							);
 							
 	 burst_size_generation mast_1_gen_logic(
@@ -81,7 +89,7 @@ module Master_1_top(
     									 );
     
     address_calc_logic mast_1_addr_calc_logic(
-    										.burst_size_m1(burst_size_m1),			//Signal coming from burst size generation logic
+    										.burst_size_m1(burst_size_m1),					//Signal coming from burst size generation logic
 											
 											//output
 											.wrap_byte_variable_m1(wrap_byte_variable_m1),	//[7:0]
@@ -96,16 +104,16 @@ module Master_1_top(
 													.hready_m1(hready_m1),
 													
 													.hburst_m1(hburst_m1),
-													.load_addr_m1(),
+													.load_addr_m1(load_addr_m1),
 													
 													.wrap_byte_variable_m1(wrap_byte_variable_m1),
 													.start_wrap_address_m1(start_wrap_address_m1),
 													.end_wrap_address_m1(end_wrap_address_m1),
 													.remainder_temp_m1(remainder_temp_m1),
 													
-													.haddr_m1(haddr_m1),		//Signal coming from FSM
+													.haddr_m1(haddr_m1),			//Signal coming from FSM
 													//Output
-													.addr_out_m1()		//Signal going to FSM
+													.addr_out_m1(addr_out_m1)		//Signal going to FSM
 												);
    
     data_gen_logic mast_1_data_gen_logic(
@@ -113,8 +121,8 @@ module Master_1_top(
 										  .hreset_m1(hreset_m1),
 										  .hready_m1(hready_m1),
 										  
-										  .load_out_m1(),			//Signal coming from FSM
+										  .load_out_m1(load_data_m1),			//Signal coming from FSM
 										  //Output
-										  .data_out_m1()			//Signal going to FSM
+										  .data_out_m1(data_out_m1)				//Signal going to FSM
 										);
 endmodule

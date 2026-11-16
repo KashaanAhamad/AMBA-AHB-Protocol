@@ -5,7 +5,7 @@
 // 
 // Create Date: 10.07.2026 23:09:29
 // Design Name: 
-// Module Name: master_2_top
+// Module Name: Master_2_top
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -38,74 +38,91 @@ module Master_2_top(
 	output logic [2:0]hburst_m2,
 	output logic [31:0]hwdata_m2  
     );
+
+	//Signal for Burst_size_gen and FSM
+    int burst_size_m2;
+
+	//Signal for Address_calculation_logic and Address_generation_logic
+    wire [7:0] wrap_byte_variable_m2;
+    wire [31:0] start_wrap_address_m2;
+    wire [31:0] end_wrap_address_m2;
+    wire [31:0] remainder_temp_m2;  
+
+	//Signal for Address_generation_logic and FSM
+	wire [31:0] addr_out_m2; 
+	logic load_addr_m2;  
+
+	//Signal for Data_generation_logic and FSM
+	wire [31:0] data_out_m2;
+	logic load_data_m2;  
   
 	Second_master_fsm fsm_mast_2(//Inputs
-    							 .hclk_m2(),
-    							 .hreset_m2(),  
-    							 .hready_m2(),
-								 .hresp_m2(), 
+    							 .hclk_m2(hclk_m2),
+    							 .hreset_m2(hreset_m2),  
+    							 .hready_m2(hready_m2),
+								 .hresp_m2(hresp_m2), 
 								 
-								 .hgrant_m2(),
-								 .hrdata_m2(),  
+								 .hgrant_m2(hgrant_m2),
+								 .hrdata_m2(hrdata_m2),  
 								 
-								 .data_out_m2(), 	//Coming from data generation logic(Size=32bit)
-								 .burst_size_m2(),  //Coming from Burst size generation logic (int type)
-								 .addr_out_m2(),    //Coming from Address generation logic (Size=32bit)
+								 .data_out_m2(data_out_m2), 	 //Coming from data generation logic(Size=32bit)
+								 .burst_size_m2(burst_size_m2),  //Coming from Burst size generation logic (int type)
+								 .addr_out_m2(addr_out_m2),      //Coming from Address generation logic (Size=32bit)
 								
 								 //Output
-								 .hwdata_m2(),				 
-								 .haddr_m2(), 
-								 .hburst_m2(),
-								 .hsize_m2(),
-								 .hwrite_m2(),
-								 .htrans_m2(),
-								 .hbusreq_m2(),
+								 .hwdata_m2(hwdata_m2),				 
+								 .haddr_m2(haddr_m2), 
+								 .hburst_m2(hburst_m2),
+								 .hsize_m2(hsize_m2),
+								 .hwrite_m2(hwrite_m2),
+								 .htrans_m2(htrans_m2),
+								 .hbusreq_m2(hbusreq_m2),
 								 
-								 .load_data_m2(),	//Signal going to data generation logic (size=1bit)
-								 .load_addr_m2()	//Signal going to Address generation logic (Size=1bit)	 
+								 .load_data_m2(load_data_m2),	//Signal going to data generation logic (size=1bit)
+								 .load_addr_m2(load_addr_m2)	//Signal going to Address generation logic (Size=1bit)	 
 							);
 
 	burst_size_gen_mast_2 burst_generation_2(
-											.hburst_m2(),
-											.burst_size_m2()
+											.hburst_m2(hburst_m2),
+											.burst_size_m2(burst_size_m2)
 										  ); 
 	
 	address_cal_logic_mast_2 addr_calculation_logic_master_2(
-															.burst_size_m2(),
+															.burst_size_m2(burst_size_m2),
 															
 															//output
-															.wrap_byte_variable_m2(),	//[7:0]
-															.start_wrap_address_m2(),	//32bit
-															.end_wrap_address_m2(),		//32bit
-															.remainder_temp_m2()
+															.wrap_byte_variable_m2(wrap_byte_variable_m2),	//[7:0]
+															.start_wrap_address_m2(start_wrap_address_m2),	//32bit
+															.end_wrap_address_m2(end_wrap_address_m2),		//32bit
+															.remainder_temp_m2(remainder_temp_m2)
 														);
 													
 	address_gen_logic_mast_2 addr_gen_logic_mast_2(
-													.hclk_m2(),
-													.hreset_m2(),
-													.hready_m2(),
+													.hclk_m2(hclk_m2),
+													.hreset_m2(hreset_m2),
+													.hready_m2(hready_m2),
 													
-													.hburst_m2(),
-													.load_addr_m2(),
+													.hburst_m2(hburst_m2),
+													.load_addr_m2(load_addr_m2),			//Signal coming from FSM
 													
-													.wrap_byte_variable_m2(),
-													.start_wrap_address_m2(),
-													.end_wrap_address_m2(),
-													.remainder_temp_m2(),
+													.wrap_byte_variable_m2(wrap_byte_variable_m2),
+													.start_wrap_address_m2(start_wrap_address_m2),
+													.end_wrap_address_m2(end_wrap_address_m2),
+													.remainder_temp_m2(remainder_temp_m2),
 													
-													.haddr_m2(),		//Signal coming from FSM
+													.haddr_m2(haddr_m2),					//Signal coming from FSM
 													//Output
-													.addr_out_m2()		//Signal going to FSM
+													.addr_out_m2(addr_out_m2)				//Signal going to FSM
 												);
 												
 	data_gen_logic_mast_2 data_gen_mast_2(
-										   .hclk_m2(),
-										   .hreset_m2(),
-										   .hready_m2(),
+										   .hclk_m2(hclk_m2),
+										   .hreset_m2(hreset_m2),
+										   .hready_m2(hready_m2),
 										   
-										   .load_out_m2(),
+										   .load_out_m2(load_data_m2),
 										   //Output
-										   .data_out_m2()
+										   .data_out_m2(data_out_m2)
 										);
 	
 endmodule
